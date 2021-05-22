@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-var User = require('sequelize').import('../models/user');
+const User = require('../db').import('../models/user'); // fix TypeError import not a function
 
 module.exports = function (req, res, next) {
     if (req.method == 'OPTIONS') {
