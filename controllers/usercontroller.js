@@ -11,23 +11,21 @@ router.post('/signup', (req, res) => {
     username: req.body.user.username,
     passwordHash: bcrypt.hashSync(req.body.user.password, process.env.SALT),
     email: req.body.user.email,
-  })
-    .then(
-      function signupSuccess(user) {
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-          expiresIn: EXPIRES_IN_SECONDS,
-        });
-        res.status(200).json({
-          user: user,
-          token: token,
-        });
-      },
+  }).then(
+    function signupSuccess(user) {
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: EXPIRES_IN_SECONDS,
+      });
+      res.status(200).json({
+        user: user,
+        token: token,
+      });
+    },
 
-      function signupFail(err) {
-        res.status(500).send(err.message);
-      }
-    )
-    .catch((e) => console.log(e));
+    function signupFail(err) {
+      res.status(500).send(err.message);
+    }
+  );
 });
 
 router.post('/signin', (req, res) => {
