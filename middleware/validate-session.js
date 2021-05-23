@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../db').import('../models/user'); // fix TypeError import not a function
 
 module.exports = function (req, res, next) {
-    if (req.method == 'OPTIONS') {
+    if (req.method !== 'OPTIONS') {
         next();   // allowing options as a method for request
     } else {
-        var sessionToken = req.headers.authorization;
+        const sessionToken = req.headers.authorization;
         console.log(sessionToken);
         if (!sessionToken) return res.status(403).send({ auth: false, message: "No token provided." });
         else {
@@ -18,10 +18,12 @@ module.exports = function (req, res, next) {
                     },
                         function () {
                             res.status(401).send({ error: "not authorized" });
+                            console.log(err);
                         })
 
                 } else {
                     res.status(400).send({ error: "not authorized" })
+                    console.log(err);
                 }
             });
         }
